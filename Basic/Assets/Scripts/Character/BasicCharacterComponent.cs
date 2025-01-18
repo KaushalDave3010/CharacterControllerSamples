@@ -21,6 +21,7 @@ public struct BasicCharacterComponent : IComponentData
     public bool PreventAirAccelerationAgainstUngroundedHits;
     public int MaxJumpsInAir;
     public BasicStepAndSlopeHandlingParameters StepAndSlopeHandling;
+    public bool AlwaysFaceCameraDirection;
     
     [Header("Tags")]
     public CustomPhysicsBodyTags IgnoreCollisionsTag;
@@ -46,7 +47,8 @@ public struct BasicCharacterComponent : IComponentData
             Gravity = math.up() * -30f,
             PreventAirAccelerationAgainstUngroundedHits = true,
             MaxJumpsInAir = 0,
-
+            AlwaysFaceCameraDirection = false,
+                
             StepAndSlopeHandling = BasicStepAndSlopeHandlingParameters.GetDefault(),
         };
     }
@@ -56,5 +58,6 @@ public struct BasicCharacterComponent : IComponentData
 public struct BasicCharacterControl : IComponentData
 {
     public float3 MoveVector;
+    public float3 RotationVector;
     public bool Jump;
 }

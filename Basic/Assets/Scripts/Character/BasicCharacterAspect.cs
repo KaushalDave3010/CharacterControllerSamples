@@ -128,11 +128,17 @@ public readonly partial struct BasicCharacterAspect : IAspect, IKinematicCharact
         // Add rotation from parent body to the character rotation
         // (this is for allowing a rotating moving platform to rotate your character as well, and handle interpolation properly)
         KinematicCharacterUtilities.AddVariableRateRotationFromFixedRateRotation(ref characterRotation, characterBody.RotationFromParent, baseContext.Time.DeltaTime, characterBody.LastPhysicsUpdateDeltaTime);
-        
-        // Rotate towards move direction
-        if (math.lengthsq(characterControl.MoveVector) > 0f)
+        if (characterComponent.AlwaysFaceCameraDirection)
         {
-            CharacterControlUtilities.SlerpRotationTowardsDirectionAroundUp(ref characterRotation, baseContext.Time.DeltaTime, math.normalizesafe(characterControl.MoveVector), MathUtilities.GetUpFromRotation(characterRotation), characterComponent.RotationSharpness);
+            CharacterControlUtilities.SlerpRotationTowardsDirectionAroundUp(ref characterRotation, baseContext.Time.DeltaTime, math.normalizesafe(characterControl.RotationVector), MathUtilities.GetUpFromRotation(characterRotation), characterComponent.RotationSharpness);
+        }
+        else
+        {
+            // Rotate towards move direction
+            if (math.lengthsq(characterControl.MoveVector) > 0f)
+            {
+                CharacterControlUtilities.SlerpRotationTowardsDirectionAroundUp(ref characterRotation, baseContext.Time.DeltaTime, math.normalizesafe(characterControl.MoveVector), MathUtilities.GetUpFromRotation(characterRotation), characterComponent.RotationSharpness);
+            }  
         }
     }
     

@@ -122,6 +122,9 @@ public partial struct BasicFixedStepPlayerControlSystem : ISystem
                 characterControl.MoveVector = (playerInputs.ValueRW.MoveInput.y * cameraForwardOnUpPlane) + (playerInputs.ValueRW.MoveInput.x * cameraRight);
                 characterControl.MoveVector = MathUtilities.ClampToMaxLength(characterControl.MoveVector, 1f);
 
+                //RotationVector
+                characterControl.RotationVector = MathUtilities.ClampToMaxLength(cameraForwardOnUpPlane, 1f);
+                
                 // Jump
                 // We detect a jump event if the jump counter has changed since the last fixed update.
                 // This is part of a strategy for proper handling of button press events that are consumed during the fixed update group
