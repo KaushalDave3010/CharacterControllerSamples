@@ -9,6 +9,7 @@ using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
 using Unity.CharacterController;
+using UnityEngine.InputSystem;
 
 [UpdateInGroup(typeof(AfterPhysicsSystemGroup))]
 [UpdateAfter(typeof(KinematicCharacterPhysicsUpdateGroup))]
@@ -52,8 +53,11 @@ public partial struct VehicleSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        float fwdInput = (Input.GetKey(KeyCode.UpArrow) ? 1f : 0f) + (Input.GetKey(KeyCode.DownArrow) ? -1f : 0f);
+        /*float fwdInput = (Input.GetKey(KeyCode.UpArrow) ? 1f : 0f) + (Input.GetKey(KeyCode.DownArrow) ? -1f : 0f);
         float sideInput = (Input.GetKey(KeyCode.RightArrow) ? 1f : 0f) + (Input.GetKey(KeyCode.LeftArrow) ? -1f : 0f);
+
+        /*float fwdInput = (Keyboard.current.upArrowKey.isPressed ? 1f : 0f) + (Keyboard.current.downArrowKey.isPressed ? -1f : 0f);
+        float sideInput = (Keyboard.current.rightArrowKey.isPressed ? 1f : 0f) + (Keyboard.current.leftArrowKey.isPressed ? -1f : 0f);#1#
 
         VehicleJob job = new VehicleJob
         {
@@ -64,7 +68,7 @@ public partial struct VehicleSystem : ISystem
             LocalTransformLookup = SystemAPI.GetComponentLookup<LocalTransform>(false),
             PhysicsColliderLookup = SystemAPI.GetComponentLookup<PhysicsCollider>(true),
         };
-        state.Dependency = job.Schedule(state.Dependency);
+        state.Dependency = job.Schedule(state.Dependency);*/
     }
 
     [BurstCompile]

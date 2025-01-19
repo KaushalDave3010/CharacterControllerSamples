@@ -9,7 +9,9 @@ public class SceneInitializationAuthoring : MonoBehaviour
     public GameObject CharacterPrefabEntity;
     public GameObject CameraPrefabEntity;
     public GameObject PlayerPrefabEntity;
+    public List<GameObject> WeaponPrefabsEntity;
 
+    public float DespawnTime;
     public class Baker : Baker<SceneInitializationAuthoring>
     {
         public override void Bake(SceneInitializationAuthoring authoring)
@@ -21,7 +23,27 @@ public class SceneInitializationAuthoring : MonoBehaviour
                 CharacterPrefabEntity = GetEntity(authoring.CharacterPrefabEntity, TransformUsageFlags.Dynamic),
                 CameraPrefabEntity = GetEntity(authoring.CameraPrefabEntity, TransformUsageFlags.Dynamic),
                 PlayerPrefabEntity = GetEntity(authoring.PlayerPrefabEntity, TransformUsageFlags.None),
+                DespawnTime = authoring.DespawnTime
             });
+            
+            DynamicBuffer<GameResourcesWeapon> weaponsBuffer = AddBuffer<GameResourcesWeapon>(entity);
+            for (var i = 0; i < authoring.WeaponPrefabsEntity.Count; i++)
+            {
+                weaponsBuffer.Add(new GameResourcesWeapon
+                {
+                    WeaponPrefab = GetEntity(authoring.WeaponPrefabsEntity[i], TransformUsageFlags.Dynamic),
+                });
+            }
         }
     }
+}
+
+public struct GameResourcesWeapon : IBufferElementData
+{
+    public Entity WeaponPrefab;
+}
+
+public struct VfxHitResources : IBufferElementData
+{
+    public UnityObjectRef<GameObject> VfxPrefab;
 }

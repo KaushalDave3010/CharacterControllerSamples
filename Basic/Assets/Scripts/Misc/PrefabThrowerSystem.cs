@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [BurstCompile]
 public partial struct PrefabThrowerSystem : ISystem
@@ -21,14 +22,14 @@ public partial struct PrefabThrowerSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        /*if (Input.GetKeyDown(KeyCode.Return))
         {
             PrefabThrowerJob job = new PrefabThrowerJob
             {
                 ECB = SystemAPI.GetSingletonRW<EndSimulationEntityCommandBufferSystem.Singleton>().ValueRW.CreateCommandBuffer(state.WorldUnmanaged),
             };
             job.Schedule();
-        }
+        }*/
     }
 
     [BurstCompile]

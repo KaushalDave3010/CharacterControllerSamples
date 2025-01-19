@@ -17,4 +17,7 @@ public struct BasicPlayerInputs : IComponentData
     public float2 CameraLookInput;
     public float CameraZoomInput;
     public FixedInputEvent JumpPressed;
+    public FixedInputEvent ShootPressed;
+    public FixedInputEvent ShootReleased;
+    public bool AimHeld;
 }

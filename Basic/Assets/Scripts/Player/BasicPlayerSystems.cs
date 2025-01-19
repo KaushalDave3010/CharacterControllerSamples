@@ -7,6 +7,7 @@ using Unity.Transforms;
 using UnityEngine;
 using Unity.CharacterController;
 using Unity.Physics.Systems;
+using Unity.Template.CompetitiveActionMultiplayer;
 
 [UpdateInGroup(typeof(InitializationSystemGroup))]
 public partial class BasicPlayerInputsSystem : SystemBase
@@ -48,6 +49,18 @@ public partial class BasicPlayerInputsSystem : SystemBase
             {
                 playerInputs.ValueRW.JumpPressed.Set(tick);
             }
+            
+            if (defaultMapActions.Fire.WasPressedThisFrame())
+            {
+                playerInputs.ValueRW.ShootPressed.Set(tick);
+            }
+            
+            if (defaultMapActions.Fire.WasReleasedThisFrame())
+            {
+                playerInputs.ValueRW.ShootReleased.Set(tick);
+            }
+
+            playerInputs.ValueRW.AimHeld = defaultMapActions.Aim.IsPressed();
         }
     }
 }
@@ -66,6 +79,8 @@ public partial struct BasicPlayerVariableStepControlSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
+        uint tick = SystemAPI.GetSingleton<FixedTickSystem.Singleton>().Tick;
+
         foreach (var (playerInputs, player) in SystemAPI.Query<BasicPlayerInputs, BasicPlayer>().WithAll<Simulate>())
         {
             if (SystemAPI.HasComponent<OrbitCameraControl>(player.ControlledCamera))
@@ -78,6 +93,28 @@ public partial struct BasicPlayerVariableStepControlSystem : ISystem
 
                 SystemAPI.SetComponent(player.ControlledCamera, cameraControl);
             }
+            
+            // Weapon
+            if (SystemAPI.HasComponent<ActiveWeapon>(player.ControlledCharacter))
+            {
+                ActiveWeapon activeWeapon = SystemAPI.GetComponent<ActiveWeapon>(player.ControlledCharacter);
+                if (SystemAPI.HasComponent<WeaponControl>(activeWeapon.Entity))
+                {
+                    RefRW<WeaponControl>  weaponControl = SystemAPI.GetComponentRW<WeaponControl>(activeWeapon.Entity);
+                    // Shoot
+                    weaponControl.ValueRW.ShootPressed = playerInputs.ShootPressed.IsSet(tick);
+                    weaponControl.ValueRW.ShootReleased = playerInputs.ShootReleased.IsSet(tick);
+                    Debug.Log($"ShootPressed: {weaponControl.ValueRW.ShootPressed}");
+                    Debug.Log($"ShootReleased: {weaponControl.ValueRW.ShootReleased}");
+
+                    // Aim
+                    weaponControl.ValueRW.AimHeld = playerInputs.AimHeld;
+                    Debug.Log($"AimHeld: {weaponControl.ValueRW.AimHeld}");
+
+                    //SystemAPI.SetComponent(activeWeapon.Entity, weaponControl);
+                }
+            }
+
         }
     }
 }

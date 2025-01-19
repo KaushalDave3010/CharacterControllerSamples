@@ -30,6 +30,10 @@ public struct BasicCharacterComponent : IComponentData
     public CustomPhysicsBodyTags InfiniteMassAgainstCharacterTag;
     public CustomPhysicsBodyTags IgnoreStepHandlingTag;
     
+    public Entity ViewEntity;
+    public Entity WeaponSocket;
+    public Entity WeaponAnimationSocketEntity;
+    
     [NonSerialized]
     public int CurrentJumpsInAir;
 
@@ -60,4 +64,18 @@ public struct BasicCharacterControl : IComponentData
     public float3 MoveVector;
     public float3 RotationVector;
     public bool Jump;
+}
+
+public struct CharacterInitialized : IComponentData, IEnableableComponent
+{
+}
+
+public struct FirstPersonCharacterView : IComponentData
+{
+    public Entity CharacterEntity;
+}
+
+public struct OwningPlayer : IComponentData
+{
+    public Entity Entity;
 }

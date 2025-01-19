@@ -10,4 +10,6 @@ public struct SceneInitialization : IComponentData
     public Entity CharacterPrefabEntity;
     public Entity CameraPrefabEntity;
     public Entity PlayerPrefabEntity;
+
+    public float DespawnTime;
 }

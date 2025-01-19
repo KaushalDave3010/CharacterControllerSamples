@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using Unity.Physics.Authoring;
 using Unity.Physics.GraphicsIntegration;
 using Unity.Physics.Systems;
+using Unity.Template.CompetitiveActionMultiplayer;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -28,6 +29,7 @@ public partial struct SceneInitializationSystem : ISystem
         if (SystemAPI.HasSingleton<SceneInitialization>())
         {
             ref SceneInitialization sceneInitializer = ref SystemAPI.GetSingletonRW<SceneInitialization>().ValueRW;
+            var weaponPrefabs = SystemAPI.GetSingletonBuffer<GameResourcesWeapon>();
 
             // Cursor
             Cursor.lockState = CursorLockMode.Locked;
@@ -47,7 +49,19 @@ public partial struct SceneInitializationSystem : ISystem
             BasicPlayer player = SystemAPI.GetComponent<BasicPlayer>(playerEntity);
             player.ControlledCharacter = characterEntity;
             player.ControlledCamera = cameraEntity;
+
+            state.EntityManager.SetName(playerEntity, "Player");
             SystemAPI.SetComponent(playerEntity, player);
+            
+            Entity randomWeaponPrefab = weaponPrefabs[0].WeaponPrefab;
+            Entity weaponEntity = state.EntityManager.Instantiate(randomWeaponPrefab);
+            
+            state.EntityManager.SetComponentData(characterEntity, new ActiveWeapon { Entity = weaponEntity });
+            state.EntityManager.SetComponentData(characterEntity, new OwningPlayer { Entity = playerEntity });
+
+            state.EntityManager.SetName(characterEntity, "Character");
+            state.EntityManager.SetName(cameraEntity, "Camera");
+            state.EntityManager.SetName(weaponEntity, "Weapon");
             
             state.EntityManager.DestroyEntity(SystemAPI.GetSingletonEntity<SceneInitialization>());
         }
