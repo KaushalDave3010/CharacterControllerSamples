@@ -7,7 +7,6 @@ namespace Unity.Template.CompetitiveActionMultiplayer
 {
     [BurstCompile]
     [UpdateInGroup(typeof(ProjectilePredictionUpdateGroup))]
-    [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
     public partial struct PlasmaShotVisualSystem : ISystem
     {
         [BurstCompile]
@@ -63,7 +62,6 @@ namespace Unity.Template.CompetitiveActionMultiplayer
 
     [BurstCompile]
     [UpdateInGroup(typeof(ProjectileVisualsUpdateGroup))]
-    [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
     public partial struct PlasmaShotVisualVfxSystem : ISystem
     {
         [BurstCompile]

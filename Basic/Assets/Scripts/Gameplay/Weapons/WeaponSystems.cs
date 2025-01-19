@@ -25,7 +25,6 @@ namespace Unity.Template.CompetitiveActionMultiplayer
     
     [BurstCompile]
     [UpdateInGroup(typeof(WeaponPredictionUpdateGroup), OrderFirst = true)]
-    [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ServerSimulation)]
     public partial struct WeaponsSimulationSystem : ISystem
     {
         [BurstCompile]
@@ -71,6 +70,7 @@ namespace Unity.Template.CompetitiveActionMultiplayer
                 ref DynamicBuffer<WeaponProjectileEvent> projectileEvents,
                 in WeaponShotSimulationOriginOverride shotSimulationOriginOverride)
             {
+                Debug.Log("BaseWeaponSimulationJob");
                 projectileEvents.Clear();
 
                 var prevTotalShotsCount = baseWeapon.TotalShotsCount;
@@ -112,12 +112,15 @@ namespace Unity.Template.CompetitiveActionMultiplayer
                 // Detect stopping fire.
                 if (!baseWeapon.Automatic || weaponControl.ShootReleased)
                 {
+                    Debug.Log("baseWeapon.IsFiring = false");
                     baseWeapon.IsFiring = false;
                 }
 
                 var shotsToFire = baseWeapon.TotalShotsCount - prevTotalShotsCount;
                 if (shotsToFire > 0)
                 {
+                    Debug.Log("shotsToFire > 0");
+
                     // Find the world transform of the shot start point.
                     RigidTransform shotSimulationOrigin = WeaponUtilities.GetShotSimulationOrigin(
                         baseWeapon.ShotOrigin,

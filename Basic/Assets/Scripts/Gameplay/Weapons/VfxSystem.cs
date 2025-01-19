@@ -57,7 +57,6 @@ namespace Unity.Template.CompetitiveActionMultiplayer
     /// It is in charge of creating the <see cref="VisualEffect"/> instances associated with the requests
     /// and triggering them when required.
     /// </summary>
-    [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
     [UpdateInGroup(typeof(SimulationSystemGroup), OrderLast = true)]
     public partial class HitVfxSystem : SystemBase
     {

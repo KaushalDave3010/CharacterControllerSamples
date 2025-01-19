@@ -11,7 +11,6 @@ namespace Unity.Template.CompetitiveActionMultiplayer
 {
     [BurstCompile]
     [UpdateInGroup(typeof(ProjectilePredictionUpdateGroup))]
-    [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ServerSimulation)]
     public partial struct RocketSimulationSystem : ISystem
     {
         [BurstCompile]
@@ -107,7 +106,6 @@ namespace Unity.Template.CompetitiveActionMultiplayer
 
     [BurstCompile]
     [UpdateInGroup(typeof(ProjectileVisualsUpdateGroup))]
-    [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
     public partial struct RocketVfxSystem : ISystem
     {
         [BurstCompile]

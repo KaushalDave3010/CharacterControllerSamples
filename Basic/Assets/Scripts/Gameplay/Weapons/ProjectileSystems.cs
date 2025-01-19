@@ -159,7 +159,6 @@ namespace Unity.Template.CompetitiveActionMultiplayer
 
     [BurstCompile]
     [UpdateInGroup(typeof(WeaponVisualsUpdateGroup))]
-    [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
     public partial struct RaycastWeaponProjectileVisualsSystem : ISystem
     {
         [BurstCompile]
