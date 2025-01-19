@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class SceneInitializationAuthoring : MonoBehaviour
 {
@@ -41,9 +42,4 @@ public class SceneInitializationAuthoring : MonoBehaviour
 public struct GameResourcesWeapon : IBufferElementData
 {
     public Entity WeaponPrefab;
-}
-
-public struct VfxHitResources : IBufferElementData
-{
-    public UnityObjectRef<GameObject> VfxPrefab;
 }

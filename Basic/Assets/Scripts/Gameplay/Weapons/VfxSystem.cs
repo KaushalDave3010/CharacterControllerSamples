@@ -73,6 +73,8 @@ namespace Unity.Template.CompetitiveActionMultiplayer
 
         protected override void OnCreate()
         {
+            Debug.Log("HitVfxSystem OnCreate");
+
             RequireForUpdate<VfxHitRequest>();
             RequireForUpdate<VfxHitResources>();
 
@@ -100,11 +102,13 @@ namespace Unity.Template.CompetitiveActionMultiplayer
 
         protected override void OnUpdate()
         {
+            Debug.Log("HitVfxSystem OnUpdate");
             var ecb = SystemAPI.GetSingletonRW<BeginSimulationEntityCommandBufferSystem.Singleton>().ValueRW.CreateCommandBuffer(World.Unmanaged);
             var rateRatio = SystemAPI.Time.DeltaTime / UnityEngine.Time.deltaTime;
             var vfxPrefabs = SystemAPI.GetSingletonBuffer<VfxHitResources>();
             foreach (var (hitVfxRequest, entity) in SystemAPI.Query<RefRO<VfxHitRequest>>().WithEntityAccess())
             {
+                Debug.Log("HitVfxSystem OnUpdate foreach");
                 if (!m_VfxDictionary.TryGetValue(hitVfxRequest.ValueRO.VfxHitType, out var vfxValue))
                 {
                     vfxValue.Vfx = Object.Instantiate(vfxPrefabs[(int)hitVfxRequest.ValueRO.VfxHitType].VfxPrefab.Value).GetComponent<VisualEffect>();
