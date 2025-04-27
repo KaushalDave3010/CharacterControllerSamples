@@ -14,23 +14,19 @@ namespace Unity.Template.CompetitiveActionMultiplayer
     {
         [Header("Network Parameters")]
         public uint DespawnTicks = 30;
-        public uint PolledEventsTicks = 30;
 
         [Header("General Parameters")]
         public float RespawnTimeSeconds = 4f;
 
         [Header("Ghost Prefabs")]
-        public GameObject PlayerGhost;
-        public GameObject CharacterGhost;
+        public GameObject PlayerPrefab;
+        public GameObject CharacterPrefab;
+        public GameObject CameraPrefab;
         public bool ForceOnlyFirstWeapon;
         public List<GameObject> WeaponGhosts;
 
-        [Header("Other Prefabs")]
-        public GameObject SpectatorPrefab;
-        public GameObject NameTagPrefab;
-
         [Tooltip("Prevent player spawning if another player is within this radius!")]
-        public float SpawnPointBlockRadius = 1f;
+        public GameObject playerSpawnPoint;
 
         [Header("VFX Graphs")]
         public VisualEffect MachineGunBulletHitVfx;
@@ -45,34 +41,28 @@ namespace Unity.Template.CompetitiveActionMultiplayer
             public override void Bake(GameResourcesAuthoring authoring)
             {
                 Entity entity = GetEntity(TransformUsageFlags.None);
-                //AddComponent(entity, new GameResources
-                //{
-                //    DespawnTicks = authoring.DespawnTicks,
-                //    PolledEventsTicks = authoring.PolledEventsTicks,
-                //    RespawnTime = authoring.RespawnTimeSeconds,
-                //    SpawnPointBlockRadius = authoring.SpawnPointBlockRadius,
-                //    SpawnPointCollisionFilter = GameLayers.CollideWithPlayers,
+                AddComponent(entity, new GameResources
+                {
+                    DespawnTicks = authoring.DespawnTicks,
+                    RespawnTime = authoring.RespawnTimeSeconds,
+                    SpawnPointCollisionFilter = GameLayers.CollideWithPlayers,
 
-                //    PlayerGhost = GetEntity(authoring.PlayerGhost, TransformUsageFlags.Dynamic),
-                //    CharacterGhost = GetEntity(authoring.CharacterGhost, TransformUsageFlags.Dynamic),
-                //    SpectatorPrefab = GetEntity(authoring.SpectatorPrefab, TransformUsageFlags.Dynamic),
+                    PlayerPrefabEntity = GetEntity(authoring.PlayerPrefab, TransformUsageFlags.Dynamic),
+                    CharacterPrefabEntity = GetEntity(authoring.CharacterPrefab, TransformUsageFlags.Dynamic),
+                    CameraPrefabEntity = GetEntity(authoring.CameraPrefab, TransformUsageFlags.Dynamic),
+                    CharacterSpawnPointEntity = GetEntity(authoring.playerSpawnPoint, TransformUsageFlags.Dynamic),
 
-                //    ForceOnlyFirstWeapon = authoring.ForceOnlyFirstWeapon,
-                //});
+                    ForceOnlyFirstWeapon = authoring.ForceOnlyFirstWeapon,
+                });
 
-                //DynamicBuffer<GameResourcesWeapon> weaponsBuffer = AddBuffer<GameResourcesWeapon>(entity);
-                //for (var i = 0; i < authoring.WeaponGhosts.Count; i++)
-                //{
-                //    weaponsBuffer.Add(new GameResourcesWeapon
-                //    {
-                //        WeaponPrefab = GetEntity(authoring.WeaponGhosts[i], TransformUsageFlags.Dynamic),
-                //    });
-                //}
-
-                //AddComponent(entity, new GameManagedResources
-                //{
-                //    NameTagPrefab = authoring.NameTagPrefab,
-                //});
+                DynamicBuffer<GameResourcesWeapon> weaponsBuffer = AddBuffer<GameResourcesWeapon>(entity);
+                for (var i = 0; i < authoring.WeaponGhosts.Count; i++)
+                {
+                    weaponsBuffer.Add(new GameResourcesWeapon
+                    {
+                        WeaponPrefab = GetEntity(authoring.WeaponGhosts[i], TransformUsageFlags.Dynamic),
+                    });
+                }
 
                 //The order in this array has to follow the VfxType enum order so the correct vfx is spawned
                 var vfxArray = new GameObject[]
@@ -102,19 +92,15 @@ namespace Unity.Template.CompetitiveActionMultiplayer
         public uint PolledEventsTicks;
         public float RespawnTime;
 
-        public Entity PlayerGhost;
-        public Entity CharacterGhost;
+        public Entity PlayerPrefabEntity;
+        public Entity CharacterPrefabEntity;
+        public Entity CameraPrefabEntity;
         public Entity SpectatorPrefab;
 
         public bool ForceOnlyFirstWeapon;
 
-        public float SpawnPointBlockRadius;
+        public Entity CharacterSpawnPointEntity;
         public CollisionFilter SpawnPointCollisionFilter;
-    }
-
-    public struct GameManagedResources : IComponentData
-    {
-        public UnityObjectRef<GameObject> NameTagPrefab;
     }
 
     public struct GameResourcesWeapon : IBufferElementData

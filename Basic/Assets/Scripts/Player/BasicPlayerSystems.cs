@@ -1,12 +1,9 @@
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using Unity.CharacterController;
-using Unity.Physics.Systems;
 using Unity.Template.CompetitiveActionMultiplayer;
 
 [UpdateInGroup(typeof(InitializationSystemGroup))]
@@ -105,14 +102,9 @@ public partial struct BasicPlayerVariableStepControlSystem : ISystem
                     // Shoot
                     weaponControl.ValueRW.ShootPressed = playerInputs.ShootPressed;
                     weaponControl.ValueRW.ShootReleased = playerInputs.ShootReleased;
-                    Debug.Log($"ShootPressed: {weaponControl.ValueRW.ShootPressed}");
-                    Debug.Log($"ShootReleased: {weaponControl.ValueRW.ShootReleased}");
 
                     // Aim
                     weaponControl.ValueRW.AimHeld = playerInputs.AimHeld;
-                    Debug.Log($"AimHeld: {weaponControl.ValueRW.AimHeld}");
-
-                    //SystemAPI.SetComponent(activeWeapon.Entity, weaponControl);
                 }
             }
 

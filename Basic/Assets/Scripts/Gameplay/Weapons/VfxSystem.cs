@@ -73,8 +73,6 @@ namespace Unity.Template.CompetitiveActionMultiplayer
 
         protected override void OnCreate()
         {
-            Debug.Log("[DebugVFX] OnCreate");
-
             RequireForUpdate<VfxHitRequest>();
             RequireForUpdate<VfxHitResources>();
 
@@ -102,13 +100,11 @@ namespace Unity.Template.CompetitiveActionMultiplayer
 
         protected override void OnUpdate()
         {
-            Debug.Log("[DebugVFX] OnUpdate");
             var ecb = SystemAPI.GetSingletonRW<BeginSimulationEntityCommandBufferSystem.Singleton>().ValueRW.CreateCommandBuffer(World.Unmanaged);
             var rateRatio = SystemAPI.Time.DeltaTime / UnityEngine.Time.deltaTime;
             var vfxPrefabs = SystemAPI.GetSingletonBuffer<VfxHitResources>();
             foreach (var (hitVfxRequest, entity) in SystemAPI.Query<RefRO<VfxHitRequest>>().WithEntityAccess())
             {
-                Debug.Log("[DebugVFX] hitVfxRequest");
                 if (!m_VfxDictionary.TryGetValue(hitVfxRequest.ValueRO.VfxHitType, out var vfxValue))
                 {
                     vfxValue.Vfx = Object.Instantiate(vfxPrefabs[(int)hitVfxRequest.ValueRO.VfxHitType].VfxPrefab.Value).GetComponent<VisualEffect>();
@@ -116,13 +112,11 @@ namespace Unity.Template.CompetitiveActionMultiplayer
                     m_VfxDictionary.Add(hitVfxRequest.ValueRO.VfxHitType, vfxValue);
 
                     DebugVfxMissingUsedProperties(hitVfxRequest.ValueRO.VfxHitType, vfxValue.Vfx);
-                    Debug.Log("[DebugVFX] TryGetValue");
 
                     //Rocket has a damage radius set in its prefab, used in the Vfx for damage radius visual feedback
                     if (hitVfxRequest.ValueRO.VfxHitType == VfxType.Rocket)
                         vfxValue.Vfx.SetFloat(VfxPropertyNames.HitRadius, hitVfxRequest.ValueRO.HitRadius);
                 }
-                Debug.Log($"[DebugVFX] rateRatio: {rateRatio}");
 
                 vfxValue.Vfx.playRate = rateRatio;
                 vfxValue.Payload.SetVector3(m_PositionId, hitVfxRequest.ValueRO.Position);

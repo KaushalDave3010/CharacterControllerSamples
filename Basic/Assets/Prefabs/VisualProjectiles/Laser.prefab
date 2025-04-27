@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7836565006330713581}
   - component: {fileID: 6588425196650519112}
   - component: {fileID: 8974053956385156738}
-  - component: {fileID: -6401741190999975366}
-  - component: {fileID: -1370556958847519083}
-  - component: {fileID: 1634374149795596369}
+  - component: {fileID: 2708065896989921964}
+  - component: {fileID: 5390579558720732756}
+  - component: {fileID: 5858602517018275077}
   m_Layer: 0
   m_Name: Laser
   m_TagString: Untagged
@@ -89,7 +89,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &-6401741190999975366
+--- !u!114 &2708065896989921964
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,12 +98,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7460990098522836823}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 321b16ec6dcb17b4495784521928d33c, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d64a86643f7c8841a370d5f8251ee9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Lifetime: 0.15
   Width: 3
---- !u!114 &-1370556958847519083
+--- !u!114 &5390579558720732756
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -112,12 +112,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7460990098522836823}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aaf0d003ea48b1d4bb74e6a0dbdc17dd, type: 3}
+  m_Script: {fileID: 11500000, guid: 0d587323b4b7edf4bba72db6528ceef8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Damage: 1000
   Range: 1000
---- !u!114 &1634374149795596369
+--- !u!114 &5858602517018275077
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,10 +126,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7460990098522836823}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd3e5ec415d6448e85ece22e2d674998, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d019de022152d742969e22faa7c1f60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VfxType: 0
+  IsBulletType: 0
   LowVfxSpawnCount: 8
   MidVfxSpawnCount: 32
   HighVfxSpawnCount: 128

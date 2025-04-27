@@ -88,7 +88,6 @@ namespace Unity.Template.CompetitiveActionMultiplayer
                 {
                     baseWeapon.IsFiring = true;
                 }
-                Debug.Log($"[DebugThis] baseWeapon.IsFiring: {baseWeapon.IsFiring} && ShootPressed: {weaponControl.ShootPressed} && ShootReleased: {weaponControl.ShootReleased} ");
 
                 // Handle firing.
                 if (baseWeapon.FiringRate > 0f)
@@ -123,7 +122,6 @@ namespace Unity.Template.CompetitiveActionMultiplayer
                 if (!baseWeapon.Automatic || weaponControl.ShootReleased)
                 {
                     baseWeapon.IsFiring = false;
-                    Debug.Log($"[DebugThis] setting baseWeapon.IsFiring: {baseWeapon.IsFiring}");
                 }
 
                 var shotsToFire = baseWeapon.TotalShotsCount - prevTotalShotsCount;

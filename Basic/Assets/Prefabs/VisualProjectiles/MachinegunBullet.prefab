@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7836565006330713581}
   - component: {fileID: 1594008931}
   - component: {fileID: 1594008930}
-  - component: {fileID: 1337334685156544542}
-  - component: {fileID: 8649718887936440213}
-  - component: {fileID: 7145884242662057731}
+  - component: {fileID: 6681358869556065081}
+  - component: {fileID: 7638578030949167178}
+  - component: {fileID: 1212592322228651474}
   m_Layer: 0
   m_Name: MachinegunBullet
   m_TagString: Untagged
@@ -89,7 +89,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1337334685156544542
+--- !u!114 &6681358869556065081
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,13 +98,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 7460990098522836823}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ee1f53cd448aed41b362a7d61f493fe, type: 3}
+  m_Script: {fileID: 11500000, guid: 0d587323b4b7edf4bba72db6528ceef8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damage: 2
+  Range: 1000
+--- !u!114 &7638578030949167178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7460990098522836823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d95c45b7e09eea41af0453bc419ff19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 500
   StretchFromSpeed: 1
   MaxStretch: 6
---- !u!114 &8649718887936440213
+--- !u!114 &1212592322228651474
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -113,21 +127,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7460990098522836823}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aaf0d003ea48b1d4bb74e6a0dbdc17dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Damage: 2
-  Range: 1000
---- !u!114 &7145884242662057731
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7460990098522836823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd3e5ec415d6448e85ece22e2d674998, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d019de022152d742969e22faa7c1f60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   IsBulletType: 1

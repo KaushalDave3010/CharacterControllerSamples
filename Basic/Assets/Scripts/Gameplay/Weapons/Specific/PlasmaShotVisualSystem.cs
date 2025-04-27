@@ -12,7 +12,6 @@ namespace Unity.Template.CompetitiveActionMultiplayer
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<SceneInitialization>();
             state.RequireForUpdate<PhysicsWorldSingleton>();
             state.RequireForUpdate(SystemAPI.QueryBuilder().WithAll<PlasmaShotVisual, PrefabProjectile>().WithDisabled<DelayedDespawn>().Build());
         }

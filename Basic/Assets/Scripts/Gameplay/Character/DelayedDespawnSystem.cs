@@ -14,7 +14,7 @@ namespace Unity.Template.CompetitiveActionMultiplayer
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<SceneInitialization>();
+            state.RequireForUpdate<GameResources>();
             state.RequireForUpdate(SystemAPI.QueryBuilder().WithAll<DelayedDespawn>().Build());
         }
 
@@ -24,7 +24,7 @@ namespace Unity.Template.CompetitiveActionMultiplayer
             DelayedDespawnJob job = new DelayedDespawnJob
             {
                 DeltaTime = SystemAPI.Time.DeltaTime,
-                DespawnTime = SystemAPI.GetSingleton<SceneInitialization>().DespawnTime,
+                DespawnTicks = SystemAPI.GetSingleton<GameResources>().DespawnTicks,
                 Ecb = SystemAPI.GetSingletonRW<BeginSimulationEntityCommandBufferSystem.Singleton>().ValueRW.CreateCommandBuffer(state.WorldUnmanaged),
                 ChildBufferLookup = SystemAPI.GetBufferLookup<Child>(true),
                 PhysicsColliderLookup = SystemAPI.GetComponentLookup<PhysicsCollider>(),
@@ -36,21 +36,17 @@ namespace Unity.Template.CompetitiveActionMultiplayer
         public unsafe partial struct DelayedDespawnJob : IJobEntity
         {
             public float DeltaTime;
-            public float DespawnTime;
+            public uint DespawnTicks;
             public EntityCommandBuffer Ecb;
             [ReadOnly] public BufferLookup<Child> ChildBufferLookup;
             public ComponentLookup<PhysicsCollider> PhysicsColliderLookup;
 
             void Execute(Entity entity, ref DelayedDespawn delayedDespawn)
             {
-                // Increment the lifetime counter
-                delayedDespawn.Lifetime += DeltaTime;
-
-                // Check if the lifetime has exceeded the despawn threshold
-                if (delayedDespawn.Lifetime >= DespawnTime)
+                delayedDespawn.Ticks++;
+                if (delayedDespawn.Ticks > DespawnTicks)
                 {
                     Ecb.DestroyEntity(entity);
-                    return;
                 }
 
                 // Handle pre-despawn logic (disable rendering and collisions)

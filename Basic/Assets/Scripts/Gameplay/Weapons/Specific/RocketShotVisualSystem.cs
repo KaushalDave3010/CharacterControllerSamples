@@ -6,6 +6,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace Unity.Template.CompetitiveActionMultiplayer
 {
@@ -16,7 +17,6 @@ namespace Unity.Template.CompetitiveActionMultiplayer
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<SceneInitialization>();
             state.RequireForUpdate<PhysicsWorldSingleton>();
         }
 

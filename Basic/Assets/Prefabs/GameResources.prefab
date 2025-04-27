@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1415942378692317673
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7109041534562342140}
+  - component: {fileID: 6994356307643058195}
+  m_Layer: 0
+  m_Name: GameResources
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7109041534562342140
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415942378692317673}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6994356307643058195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415942378692317673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f2cd7643347b0f4dbf1cd3003951cd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DespawnTicks: 16
+  RespawnTimeSeconds: 4
+  PlayerPrefab: {fileID: 4729649056687684238, guid: 65701a63aea96444fa3a4b2ed4edbb25, type: 3}
+  CharacterPrefab: {fileID: 1692896102597148395, guid: 5fbcc801dea8fd640a004697d22ed448, type: 3}
+  CameraPrefab: {fileID: 7568817337597995144, guid: 492a184cc1501fe4da86d69b5eddc366, type: 3}
+  ForceOnlyFirstWeapon: 0
+  WeaponGhosts:
+  - {fileID: 9058671491380490423, guid: ab2121d5b01c9bf49bce247b036392f9, type: 3}
+  - {fileID: 9058671491380490423, guid: b57eb5e59fe483041bcc4dee19f60dbc, type: 3}
+  - {fileID: 5179934649230605806, guid: 44cc784d5b8c9594baabe6f315e02449, type: 3}
+  - {fileID: 2703708565719520083, guid: 67366902802e79440a2e9b9a58ce4370, type: 3}
+  - {fileID: 1060756309112113506, guid: c20f40bc8f9814b409807f3e97fc1631, type: 3}
+  playerSpawnPoint: {fileID: 0}
+  MachineGunBulletHitVfx: {fileID: 5735981394477805925, guid: 6ce8060434497e6429ed57f804fc5215, type: 3}
+  ShotgunBulletHitVfx: {fileID: 5735981394477805925, guid: ee9a55247cf3a1249b7a416fc5dcf30a, type: 3}
+  LaserHitVfx: {fileID: 5735981394477805925, guid: 8aa0938014a73644a9892453e9bc3814, type: 3}
+  PlasmaHitVfx: {fileID: 5735981394477805925, guid: b3d7a2c796cf28f42b1047ad7a4ad293, type: 3}
+  RocketHitVfx: {fileID: 5735981394477805925, guid: adc9190a2202b0e4a811f2c77e86dbc0, type: 3}
+  DeathSparksVfx: {fileID: 5735981394477805925, guid: 3128eca2f54121a4d9bec979e41c7a6f, type: 3}
