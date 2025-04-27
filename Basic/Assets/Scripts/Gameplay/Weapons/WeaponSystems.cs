@@ -22,7 +22,7 @@ namespace Unity.Template.CompetitiveActionMultiplayer
     public partial class WeaponVisualsUpdateGroup : ComponentSystemGroup
     {
     }
-    
+
     [BurstCompile]
     [UpdateInGroup(typeof(WeaponPredictionUpdateGroup), OrderFirst = true)]
     public partial struct WeaponsSimulationSystem : ISystem
@@ -37,6 +37,7 @@ namespace Unity.Template.CompetitiveActionMultiplayer
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
+
             BaseWeaponSimulationJob baseWeaponSimulationJob = new BaseWeaponSimulationJob
             {
                 DeltaTime = SystemAPI.Time.DeltaTime,
@@ -45,7 +46,7 @@ namespace Unity.Template.CompetitiveActionMultiplayer
                 PostTransformMatrixLookup = SystemAPI.GetComponentLookup<PostTransformMatrix>(true),
             };
             state.Dependency = baseWeaponSimulationJob.ScheduleParallel(state.Dependency);
-            
+
             RaycastWeaponSimulationJob raycastWeaponSimulationJob = new RaycastWeaponSimulationJob
             {
                 PhysicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().PhysicsWorld,
@@ -53,6 +54,14 @@ namespace Unity.Template.CompetitiveActionMultiplayer
                 HealthLookup = SystemAPI.GetComponentLookup<Health>(),
             };
             state.Dependency = raycastWeaponSimulationJob.Schedule(state.Dependency);
+
+            PrefabWeaponSimulationJob prefabWeaponSimulationJob = new PrefabWeaponSimulationJob
+            {
+                Ecb = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
+                    .CreateCommandBuffer(state.WorldUnmanaged),
+                PrefabProjectileLookup = SystemAPI.GetComponentLookup<PrefabProjectile>(true),
+            };
+            state.Dependency = prefabWeaponSimulationJob.Schedule(state.Dependency);
         }
 
         [BurstCompile]
@@ -70,7 +79,6 @@ namespace Unity.Template.CompetitiveActionMultiplayer
                 ref DynamicBuffer<WeaponProjectileEvent> projectileEvents,
                 in WeaponShotSimulationOriginOverride shotSimulationOriginOverride)
             {
-                Debug.Log("BaseWeaponSimulationJob");
                 projectileEvents.Clear();
 
                 var prevTotalShotsCount = baseWeapon.TotalShotsCount;
@@ -80,6 +88,8 @@ namespace Unity.Template.CompetitiveActionMultiplayer
                 {
                     baseWeapon.IsFiring = true;
                 }
+                Debug.Log($"[DebugThis] baseWeapon.IsFiring: {baseWeapon.IsFiring} && ShootPressed: {weaponControl.ShootPressed} && ShootReleased: {weaponControl.ShootReleased} ");
+
                 // Handle firing.
                 if (baseWeapon.FiringRate > 0f)
                 {
@@ -112,15 +122,13 @@ namespace Unity.Template.CompetitiveActionMultiplayer
                 // Detect stopping fire.
                 if (!baseWeapon.Automatic || weaponControl.ShootReleased)
                 {
-                    Debug.Log("baseWeapon.IsFiring = false");
                     baseWeapon.IsFiring = false;
+                    Debug.Log($"[DebugThis] setting baseWeapon.IsFiring: {baseWeapon.IsFiring}");
                 }
 
                 var shotsToFire = baseWeapon.TotalShotsCount - prevTotalShotsCount;
                 if (shotsToFire > 0)
                 {
-                    Debug.Log("shotsToFire > 0");
-
                     // Find the world transform of the shot start point.
                     RigidTransform shotSimulationOrigin = WeaponUtilities.GetShotSimulationOrigin(
                         baseWeapon.ShotOrigin,
@@ -154,12 +162,11 @@ namespace Unity.Template.CompetitiveActionMultiplayer
                 }
             }
         }
-        
+
         [BurstCompile]
         [WithAll(typeof(Simulate))]
         public partial struct RaycastWeaponSimulationJob : IJobEntity, IJobEntityChunkBeginEnd
         {
-            public uint OldestAllowedVfxRequestsTick;
             [ReadOnly] public PhysicsWorld PhysicsWorld;
             [ReadOnly] public ComponentLookup<RaycastProjectile> RaycastProjectileLookup;
             public ComponentLookup<Health> HealthLookup;
@@ -176,6 +183,9 @@ namespace Unity.Template.CompetitiveActionMultiplayer
                 if (RaycastProjectileLookup.TryGetComponent(raycastWeapon.ProjectilePrefab,
                         out RaycastProjectile raycastProjectile))
                 {
+                    if (!m_Hits.IsCreated)
+                        m_Hits = new NativeList<RaycastHit>(Allocator.Temp);
+
                     // Handle each shot
                     for (var i = 0; i < projectileEvents.Length; i++)
                     {
@@ -236,8 +246,55 @@ namespace Unity.Template.CompetitiveActionMultiplayer
             {
             }
         }
+
+        [BurstCompile]
+        [WithAll(typeof(Simulate))]
+        public partial struct PrefabWeaponSimulationJob : IJobEntity
+        {
+            public bool IsServer;
+            public EntityCommandBuffer Ecb;
+            [ReadOnly] public ComponentLookup<PrefabProjectile> PrefabProjectileLookup;
+
+            void Execute(
+                Entity entity,
+                in PrefabWeapon prefabWeapon,
+                in DynamicBuffer<WeaponProjectileEvent> projectileEvents,
+                in LocalTransform localTransform,
+                in DynamicBuffer<WeaponShotIgnoredEntity> ignoredEntities)
+            {
+                if (PrefabProjectileLookup.TryGetComponent(prefabWeapon.ProjectilePrefab,
+                        out PrefabProjectile prefabProjectile))
+                {
+                    for (var i = 0; i < projectileEvents.Length; i++)
+                    {
+                        WeaponProjectileEvent projectileEvent = projectileEvents[i];
+
+                        // Projectile spawn.
+                        Entity spawnedProjectile = Ecb.Instantiate(prefabWeapon.ProjectilePrefab);
+                        Ecb.SetComponent(spawnedProjectile, LocalTransform.FromPositionRotation(
+                            projectileEvent.SimulationPosition,
+                            quaternion.LookRotationSafe(projectileEvent.SimulationDirection,
+                                math.mul(localTransform.Rotation, math.up()))));
+                        Ecb.SetComponent(spawnedProjectile,
+                            new ProjectileSpawnId { WeaponEntity = entity, SpawnId = projectileEvent.Id });
+                        for (var k = 0; k < ignoredEntities.Length; k++)
+                        {
+                            Ecb.AppendToBuffer(spawnedProjectile, ignoredEntities[k]);
+                        }
+
+                        // Set projectile data.
+                        {
+                            prefabProjectile.Velocity = prefabProjectile.Speed * projectileEvent.SimulationDirection;
+                            prefabProjectile.VisualOffset =
+                                projectileEvent.VisualPosition - projectileEvent.SimulationPosition;
+                            Ecb.SetComponent(spawnedProjectile, prefabProjectile);
+                        }
+                    }
+                }
+            }
+        }
     }
-    
+
     [BurstCompile]
     [UpdateInGroup(typeof(WeaponVisualsUpdateGroup), OrderFirst = true)]
     public partial struct InitializeWeaponLastShotVisualsSystem : ISystem

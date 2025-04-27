@@ -45,9 +45,9 @@ public class PlayerInputHandler : MonoBehaviour
         inputActions.Enable();
 
         // Subscribe to Fire events
-        inputActions.DefaultMap.Fire.started += OnFireStarted;
-        inputActions.DefaultMap.Fire.performed += OnFirePerformed;
-        inputActions.DefaultMap.Fire.canceled += OnFireCanceled;
+        inputActions.DefaultMap.Shoot.started += OnFireStarted;
+        inputActions.DefaultMap.Shoot.performed += OnFirePerformed;
+        inputActions.DefaultMap.Shoot.canceled += OnFireCanceled;
 
         // Subscribe to Jump events
         inputActions.DefaultMap.Jump.started += OnJumpStarted;
@@ -58,9 +58,9 @@ public class PlayerInputHandler : MonoBehaviour
     private void OnDisable()
     {
         // Unsubscribe from Fire events
-        inputActions.DefaultMap.Fire.started -= OnFireStarted;
-        inputActions.DefaultMap.Fire.performed -= OnFirePerformed;
-        inputActions.DefaultMap.Fire.canceled -= OnFireCanceled;
+        inputActions.DefaultMap.Shoot.started -= OnFireStarted;
+        inputActions.DefaultMap.Shoot.performed -= OnFirePerformed;
+        inputActions.DefaultMap.Shoot.canceled -= OnFireCanceled;
 
         // Unsubscribe from Jump events
         inputActions.DefaultMap.Jump.started -= OnJumpStarted;

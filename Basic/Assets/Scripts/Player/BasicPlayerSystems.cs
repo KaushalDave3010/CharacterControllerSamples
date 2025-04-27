@@ -49,15 +49,16 @@ public partial class BasicPlayerInputsSystem : SystemBase
             {
                 playerInputs.ValueRW.JumpPressed.Set(tick);
             }
-            
-            if (defaultMapActions.Fire.WasPressedThisFrame())
+
+            if (defaultMapActions.Shoot.IsPressed())
             {
-                playerInputs.ValueRW.ShootPressed.Set(tick);
+                playerInputs.ValueRW.ShootPressed = true;
+                playerInputs.ValueRW.ShootReleased = false;
             }
-            
-            if (defaultMapActions.Fire.WasReleasedThisFrame())
+            else
             {
-                playerInputs.ValueRW.ShootReleased.Set(tick);
+                playerInputs.ValueRW.ShootPressed = false;
+                playerInputs.ValueRW.ShootReleased = true;
             }
 
             playerInputs.ValueRW.AimHeld = defaultMapActions.Aim.IsPressed();
@@ -102,8 +103,8 @@ public partial struct BasicPlayerVariableStepControlSystem : ISystem
                 {
                     RefRW<WeaponControl>  weaponControl = SystemAPI.GetComponentRW<WeaponControl>(activeWeapon.Entity);
                     // Shoot
-                    weaponControl.ValueRW.ShootPressed = playerInputs.ShootPressed.IsSet(tick);
-                    weaponControl.ValueRW.ShootReleased = playerInputs.ShootReleased.IsSet(tick);
+                    weaponControl.ValueRW.ShootPressed = playerInputs.ShootPressed;
+                    weaponControl.ValueRW.ShootReleased = playerInputs.ShootReleased;
                     Debug.Log($"ShootPressed: {weaponControl.ValueRW.ShootPressed}");
                     Debug.Log($"ShootReleased: {weaponControl.ValueRW.ShootReleased}");
 
